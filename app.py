@@ -3,6 +3,7 @@
 import streamlit as st
 import google.generativeai as palm
 
+#generate an api key and replace before running the code
 palm.configure(api_key="generated-api-key")
 
 #Define the model to use
