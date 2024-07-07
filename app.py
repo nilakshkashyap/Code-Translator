@@ -3,7 +3,7 @@
 import streamlit as st
 import google.generativeai as palm
 
-palm.configure(api_key="AIzaSyCzo6ZghwFxUz_aZi5WcKJvpklqXv9vl74")
+palm.configure(api_key="generated-api-key")
 
 #Define the model to use
 model_name="models/chat-bison-001"
