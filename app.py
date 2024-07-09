@@ -2,9 +2,17 @@
 
 import streamlit as st
 import google.generativeai as palm
+from dotenv import load_dotenv
+import os
 
-# generate an api key and replace before running the code
-palm.configure(api_key="AIzaSyCQukQOHXexAmB0ZBFELhk2sui1cfmhw_o")
+# Load the .env file
+load_dotenv()
+
+# Access the API key
+gemini_api_key = os.getenv('GEMINI_API_KEY')
+
+# Configure the API key
+palm.configure(api_key=gemini_api_key)
 
 # Define the model to use
 model_name = "models/chat-bison-001"
