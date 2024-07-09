@@ -5,7 +5,7 @@ import google.generativeai as palm
 from dotenv import load_dotenv
 import os
 
-# Load the .env file
+#Load the .env file
 load_dotenv()
 
 # Access the API key
