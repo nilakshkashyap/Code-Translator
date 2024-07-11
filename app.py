@@ -20,10 +20,11 @@ model_name = "models/chat-bison-001"
 
 # Function to translate code from one language to another
 def translate_code(code_snippet, target_language):
+    instruction = "Give Fully runnable code. Include syntax highlighting. Give only the translated code"
     prompt = f"Translate the following code to {target_language}:\n\n{code_snippet}"
     response = palm.chat(
         model=model_name,
-        messages=[prompt]
+        messages=[instruction,prompt]
     )
     return response.candidates[0]["content"]
 
@@ -120,7 +121,7 @@ def main():
                 try:
                     translated_code = translate_code(source_code_snippet, target_language)
                     st.success("Code translation complete!")
-                    st.code(translated_code, language=target_language.lower())
+                    st.markdown(translated_code)
                 except Exception as e:
                     st.error(f"Error translating code: {e}")
         else:
