@@ -30,32 +30,91 @@ def translate_code(code_snippet, target_language):
 
 # Streamlit application
 def main():
+
     st.title("CodeXchange: Ai-Powered Code Translation Tool")
+   
+    st.markdown(
+        """
+        <style>
 
-    st.markdown("""
-    <h2>Project Description</h2>
-    <p>CodeXchange is an innovative web application designed to streamline code translation and facilitate seamless collaboration among developers working with different programming languages. Whether you're transitioning applications between platforms, collaborating in multilingual teams, or reusing code across projects, CodeXchange empowers developers to effortlessly translate code snippets between various programming languages. Leveraging advanced translation algorithms and syntax analysis, CodeXchange ensures accurate and reliable code conversion while preserving the original functionality and logic. With its intuitive interface and comprehensive language support, CodeXchange revolutionizes the development workflow, enabling teams to work together efficiently, enhance code reusability, and accelerate project delivery.</p>
-    """, unsafe_allow_html=True)
+        # .stTextArea{
+        #     margin: 16px
+        # }
 
-    st.markdown("""
-    <h2>Scenario 1: Platform Transition</h2>
-    <p>CodeXchange assists developers in transitioning applications from one platform to another. For instance, a team working on an application written in Python needs to migrate it to Java to leverage Java's robustness and scalability in an enterprise environment. By inputting the Python code snippets and selecting Java as the target language, developers receive accurately translated code that maintains the original functionality, streamlining the migration process and minimizing the risk of introducing errors.</p>
-    """, unsafe_allow_html=True)
+        .main .block-container {
+        max-width: 1000px;
+        padding: 1rem;
+    }
 
-    st.markdown("""
-    <h2>Scenario 2: Multilingual Collaboration</h2>
-    <p>In a collaborative project where team members use different programming languages, CodeXchange facilitates seamless integration by translating code snippets as needed. Suppose one part of the team is proficient in C++ while another prefers Python. Developers can write code in their preferred language and use CodeXchange to translate it, ensuring all team members can work together efficiently without being constrained by language barriers. This enhances productivity and reduces the learning curve associated with adopting new languages.</p>
-    """, unsafe_allow_html=True)
+    .stSelectbox{
+        max-width: 25%
+    }
 
-    st.markdown("""
-    <h2>Scenario 3: Code Reusability Across Projects</h2>
-    <p>CodeXchange promotes code reusability by enabling developers to translate existing code into different languages for new projects. For example, a developer has written a set of utility functions in Java that would be beneficial for a new project being developed in C++. By translating these Java functions into C++ using CodeXchange, the developer can quickly integrate proven code into the new project, saving time and ensuring consistency across different projects.</p>
-    """, unsafe_allow_html=True)
+        .use-case-container{
+    min-height: 30vh;
+    display: flex;
+    justify-content: space-evenly;
+    font-family: "Source Sans Pro", sans-serif;
+}
 
-    st.subheader("Code Translation")
+.use-case-item{
+    flex-grow: 1;
+    margin: 48px auto;
+    margin-right: 16px;
+    padding: 16px;
+    color: rgba(245, 245, 245, 0.925);
+    border: 2px solid rgb(59, 165, 165);
+}
+
+.use-case-title{
+    font-weight: 800;
+    font-size: 24px;
+}
+.use-case-description{
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 2rem;
+    color: #9e9d9d;
+}
+        """, unsafe_allow_html=True
+    )
+
+    st.markdown(
+        f"""
+       <div class="use-case-container">
+        <div class="use-case-item">
+            <div class="use-case-title">
+                <p>Platform Transition</p>
+            </div>
+            <div class="use-case-description">
+                <p>Easily migrate your codebase from one programming language to another, ensuring seamless platform transition and reducing development time.</p>
+            </div>
+        </div>
+        <div class="use-case-item">
+            <div class="use-case-title">
+                <p>Multilingual Collaboration</p>
+            </div>
+            <div class="use-case-description">
+                <p>Facilitate collaboration among developers who prefer different programming languages by translating code, enabling a more inclusive and productive team environment</p>
+            </div>
+        </div>
+        <div class="use-case-item">
+            <div class="use-case-title">
+                <p>Code Reusability</p>
+            </div>
+            <div class="use-case-description">
+                <p>Maximize code reuse by translating existing code into different languages for various projects, ensuring consistency and saving time on development.</p>
+            </div>
+        </div>
+    </div>
+        """, unsafe_allow_html=True
+    )
+
+    
+
     source_code_snippet = st.text_area("Enter the code snippet you want to translate:")
     target_language = st.selectbox("Select the target programming language:", ["Python", "Java", "C++"])
-    if st.button("Translation Code"):
+    if st.button("Translate"):
         if source_code_snippet.strip():
             with st.spinner("Translating code..."):
                 try:
