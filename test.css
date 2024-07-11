@@ -1,0 +1,34 @@
+body{
+    background-color: rgb(14, 17, 23)
+}
+
+.use-case-container{
+    min-height: 30vh;
+    max-width: 60%;
+    margin: auto auto;
+    display: flex;
+    justify-content: space-between;
+    font-family: "Source Sans Pro", sans-serif;
+    /* background-color: blue; */
+}
+
+.use-case-item{
+    flex-grow: 1;
+    margin: 24px;
+    padding: 16px;
+    color: rgba(245, 245, 245, 0.925);
+    border: 2px solid rgb(59, 165, 165);
+    box-shadow: 5px 5px rgba(0, 255, 255, 0.658);
+}
+
+
+.use-case-title{
+    font-weight: 800;
+    font-size: 24px;
+}
+.use-case-description{
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 2rem;
+    color: #9e9d9d;
+}

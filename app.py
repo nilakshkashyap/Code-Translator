@@ -72,6 +72,9 @@ def commandLine(targetLanguage):
 def main():
 
     st.title("CodeXchange: Ai-Powered Code Translation Tool")
+    st.write("""
+             <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+             """,unsafe_allow_html=True)
     st.markdown(
         """
         <style>
@@ -100,6 +103,7 @@ def main():
     padding: 16px;
     color: rgba(245, 245, 245, 0.925);
     border: 2px solid rgb(59, 165, 165);
+    box-shadow: 5px 5px rgba(0, 255, 255, 0.658);
 }
 
 .use-case-title{
@@ -121,6 +125,7 @@ def main():
         <div class="use-case-item">
             <div class="use-case-title">
                 <p>Platform Transition</p>
+                <span class="material-symbols-outlined"> compare_arrows</span>
             </div>
             <div class="use-case-description">
                 <p>Easily migrate your codebase from one programming language to another, ensuring seamless platform transition and reducing development time.</p>
@@ -128,7 +133,8 @@ def main():
         </div>
         <div class="use-case-item">
             <div class="use-case-title">
-                <p>Multilingual Collaboration</p>  
+                <p>Multilingual Collaboration</p>
+                <span class="material-symbols-outlined">groups</span>
             </div>
             <div class="use-case-description">
                 <p>Facilitate collaboration among developers who prefer different programming languages by translating code, enabling a more inclusive and productive team environment</p>
@@ -137,6 +143,7 @@ def main():
         <div class="use-case-item">
             <div class="use-case-title">
                 <p>Code Reusability</p>
+                <span class="material-symbols-outlined">cycle</span>
             </div>
             <div class="use-case-description">
                 <p>Maximize code reuse by translating existing code into different languages for various projects, ensuring consistency and saving time on development.</p>
