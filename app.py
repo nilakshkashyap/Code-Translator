@@ -3,7 +3,7 @@
 import streamlit as st
 import google.generativeai as palm
 from dotenv import load_dotenv
-import os
+import os,re,sys
 
 #Load the .env file
 load_dotenv()
@@ -16,31 +16,66 @@ palm.configure(api_key=gemini_api_key)
 
 # Define the model to use
 model_name = "models/chat-bison-001"
+languages = ["Python", "Java", "C++"]
 
 
 # Function to translate code from one language to another
 def translate_code(code_snippet, target_language):
     instruction = "Give Fully runnable code. Include syntax highlighting. Give only the translated code"
     prompt = f"Translate the following code to {target_language}:\n\n{code_snippet}"
-    response = palm.chat(
-        model=model_name,
-        messages=[instruction,prompt]
-    )
+    try:
+        response = palm.chat(
+            model=model_name,
+            messages=[instruction,prompt]
+        )
+    except google.api_core.exceptions.DeadlineExceeded:
+        print("Timeout. Please Try again")
+        exit()
     return response.candidates[0]["content"]
 
+
+def extractCode(code):
+    try:
+        markdown_pattern = re.compile(r"(```[.<>\[\]\{\}#\w\s\\n\(\);,+=\":/]*```)\s*(?:.*)$")
+        markdown_code = re.search(markdown_pattern,code).group(1)
+        markdown_pattern = re.compile(r"`.*")
+        markdown_code = str(re.sub(markdown_pattern,"",markdown_code))
+        return markdown_code
+    except IndexError:
+        print("Timeout. Please Try again")
+        exit()
+
+
+
+def commandLine(targetLanguage):
+    inputFileName = outputFileName = ""
+    if len(sys.argv) < 4:
+        outputFileName = "converted.txt"
+    else:
+        outputFileName = sys.argv[3]
+    inputFileName = sys.argv[2]
+    code = ""
+    with open(inputFileName,"r") as inputFile:
+        code = inputFile.read()
+
+    with open(outputFileName,"w") as outputFile:
+        print("\rConverting...")
+        translated_code = extractCode(translate_code(code,targetLanguage))
+        print("\rConverted...")
+        print("\rSaving...")
+        outputFile.write(translated_code)
+        print("\rOutput Saved...\n\n")
+        print(f"{targetLanguage.title()} Code:")
+        print(translated_code)
 
 # Streamlit application
 def main():
 
     st.title("CodeXchange: Ai-Powered Code Translation Tool")
-   
     st.markdown(
         """
         <style>
 
-        # .stTextArea{
-        #     margin: 16px
-        # }
 
         .main .block-container {
         max-width: 1000px;
@@ -82,7 +117,7 @@ def main():
 
     st.markdown(
         f"""
-       <div class="use-case-container">
+        <div class="use-case-container">
         <div class="use-case-item">
             <div class="use-case-title">
                 <p>Platform Transition</p>
@@ -93,7 +128,7 @@ def main():
         </div>
         <div class="use-case-item">
             <div class="use-case-title">
-                <p>Multilingual Collaboration</p>
+                <p>Multilingual Collaboration</p>  
             </div>
             <div class="use-case-description">
                 <p>Facilitate collaboration among developers who prefer different programming languages by translating code, enabling a more inclusive and productive team environment</p>
@@ -114,12 +149,14 @@ def main():
     
 
     source_code_snippet = st.text_area("Enter the code snippet you want to translate:")
-    target_language = st.selectbox("Select the target programming language:", ["Python", "Java", "C++"])
+    target_language = st.selectbox("Select the target programming language:",languages)
     if st.button("Translate"):
         if source_code_snippet.strip():
             with st.spinner("Translating code..."):
                 try:
                     translated_code = translate_code(source_code_snippet, target_language)
+                    # print(translated_code)
+                    print(extractCode(translated_code))
                     st.success("Code translation complete!")
                     st.markdown(translated_code)
                 except Exception as e:
@@ -129,5 +166,13 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    if len(sys.argv) == 1:
+        main()
+    elif len(sys.argv) < 3 or sys.argv[1] == "help" :
+        print("Usage: [Target Language] [Input File] [Output File]")
+        print("Languages: \n")
+        for i in languages:
+            print(f"[>] {i}")
+    elif sys.argv[1].title() in languages:
+        commandLine(sys.argv[1])
     
