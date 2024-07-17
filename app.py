@@ -1,8 +1,9 @@
+# Before running the code run `pip install -r requirements.txt` in the terminal
+
 import streamlit as st
 import google.generativeai as palm
 from dotenv import load_dotenv
-import os,sys
-from google.api_core.exceptions import DeadlineExceeded
+import os,re,sys
 
 #Load the .env file
 load_dotenv()
@@ -27,10 +28,24 @@ def translate_code(code_snippet, target_language):
             model=model_name,
             messages=[instruction,prompt]
         )
-    except DeadlineExceeded:
+    except google.api_core.exceptions.DeadlineExceeded:
         print("Timeout. Please Try again")
         exit()
     return response.candidates[0]["content"]
+
+
+def extractCode(code):
+    try:
+        markdown_pattern = re.compile(r"(```[.<>\[\]\{\}#\w\s\\n\(\);,+=\":/]*```)\s*(?:.*)$")
+        markdown_code = re.search(markdown_pattern,code).group(1)
+        markdown_pattern = re.compile(r"`.*")
+        markdown_code = str(re.sub(markdown_pattern,"",markdown_code))
+        return markdown_code
+    except IndexError:
+        print("Timeout. Please Try again")
+        exit()
+
+
 
 def commandLine(targetLanguage):
     inputFileName = outputFileName = ""
@@ -45,7 +60,7 @@ def commandLine(targetLanguage):
 
     with open(outputFileName,"w") as outputFile:
         print("\rConverting...")
-        translated_code = translate_code(code,targetLanguage)
+        translated_code = extractCode(translate_code(code,targetLanguage))
         print("\rConverted...")
         print("\rSaving...")
         outputFile.write(translated_code)
@@ -75,7 +90,7 @@ def main():
     }
 
         .use-case-container{
-    min-height: 20vh;
+    min-height: 30vh;
     display: flex;
     justify-content: space-evenly;
     font-family: "Source Sans Pro", sans-serif;
@@ -147,7 +162,8 @@ def main():
             with st.spinner("Translating code..."):
                 try:
                     translated_code = translate_code(source_code_snippet, target_language)
-                    print(translated_code)
+                    # print(translated_code)
+                    print(extractCode(translated_code))
                     st.success("Code translation complete!")
                     st.markdown(translated_code)
                 except Exception as e:
